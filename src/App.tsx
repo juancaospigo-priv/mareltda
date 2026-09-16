@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, useOutletContext } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { ToastProvider } from '@/components/ui/Toast';
+import { SessionDataProvider } from '@/context/SessionData';
 import { ResumenEjecutivo } from '@/pages/ResumenEjecutivo';
 import { OportunidadesIA } from '@/pages/OportunidadesIA';
 import { Clientes } from '@/pages/Clientes';
@@ -28,20 +29,22 @@ function InventarioWrapper() {
 export default function App() {
   return (
     <ToastProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route index element={<ResumenEjecutivoWrapper />} />
-            <Route path="oportunidades" element={<OportunidadesIA />} />
-            <Route path="clientes" element={<Clientes />} />
-            <Route path="pedidos" element={<Pedidos />} />
-            <Route path="inventario" element={<InventarioWrapper />} />
-            <Route path="catalogo" element={<Catalogo />} />
-            <Route path="visitas" element={<Visitas />} />
-            <Route path="configuracion" element={<Configuracion />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <SessionDataProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route index element={<ResumenEjecutivoWrapper />} />
+              <Route path="oportunidades" element={<OportunidadesIA />} />
+              <Route path="clientes" element={<Clientes />} />
+              <Route path="pedidos" element={<Pedidos />} />
+              <Route path="inventario" element={<InventarioWrapper />} />
+              <Route path="catalogo" element={<Catalogo />} />
+              <Route path="visitas" element={<Visitas />} />
+              <Route path="configuracion" element={<Configuracion />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </SessionDataProvider>
     </ToastProvider>
   );
 }

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Users, UserMinus, Sparkles, ShoppingCart, PackageX, TrendingDown,
   ArrowRightLeft, DollarSign, AlertTriangle, ArrowRight,
-  CalendarDays, Activity, ChevronRight,
+  CalendarDays, Activity, ChevronRight, PhoneCall, CheckCircle2,
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -15,22 +15,33 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Skeleton, SkeletonCard } from '@/components/ui/Skeleton';
 import { useToast } from '@/components/ui/Toast';
+import { CallToOpportunityDrawer } from '@/components/calls/CallToOpportunityDrawer';
+import { useSessionData } from '@/context/SessionData';
 import {
   getKPIs, getPrioridadesIA, getOportunidadesPorSede, getInventarioStatusData,
-  clientes, visitas, actividadesRecientes, formatCOP, diasDesde, type SedeId,
+  formatCOP, diasDesde, type SedeId,
 } from '@/data/simData';
 
 export function ResumenEjecutivo({ sedeSeleccionada }: { sedeSeleccionada: SedeId | 'todas' }) {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [loading, setLoading] = useState(true);
+  const [llamadaOpen, setLlamadaOpen] = useState(false);
+  const { clientes, pedidos, traslados, visitas, actividades, llamadaConvertida } = useSessionData();
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 600);
     return () => clearTimeout(t);
   }, []);
 
-  const kpis = getKPIs();
+  const kpisBase = getKPIs();
+  const kpis = {
+    ...kpisBase,
+    clientesActivos: clientes.filter((cliente) => cliente.estadoComercial === 'Activo').length,
+    clientesSinContacto: clientes.filter((cliente) => diasDesde(cliente.ultimaVisita) > 30).length,
+    pedidosPendientes: pedidos.filter((pedido) => pedido.estado !== 'Despachado').length,
+    trasladosPendientes: traslados.filter((traslado) => traslado.estado === 'Sugerido').length,
+  };
   const prioridades = getPrioridadesIA();
   const oportunidadesData = getOportunidadesPorSede();
   const inventarioData = getInventarioStatusData();
@@ -59,13 +70,18 @@ export function ResumenEjecutivo({ sedeSeleccionada }: { sedeSeleccionada: SedeI
   return (
     <div className="space-y-6 max-w-[1600px] mx-auto">
       {/* Greeting */}
-      <div>
-        <h1 className="text-2xl font-bold text-navy-800">
-          {getGreeting()}. Esto es lo que requiere atención hoy en Mare.
-        </h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Resumen consolidado {sedeSeleccionada === 'todas' ? 'de todas las sedes' : `de sede ${sedeSeleccionada}`}
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-navy-800">
+            {getGreeting()}. Esto es lo que requiere atención hoy en Mare.
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Resumen consolidado {sedeSeleccionada === 'todas' ? 'de todas las sedes' : `de sede ${sedeSeleccionada}`}
+          </p>
+        </div>
+        <Button variant="accent" size="lg" icon={llamadaConvertida ? <CheckCircle2 className="w-4 h-4" /> : <PhoneCall className="w-4 h-4" />} onClick={() => setLlamadaOpen(true)} className="flex-shrink-0">
+          Registrar llamada con IA
+        </Button>
       </div>
 
       {/* KPIs */}
@@ -198,7 +214,7 @@ export function ResumenEjecutivo({ sedeSeleccionada }: { sedeSeleccionada: SedeI
               <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}</div>
             ) : (
               <div className="space-y-3">
-                {actividadesRecientes.map((a) => (
+          {actividades.slice(0, 5).map((a) => (
                   <div key={a.id} className="flex items-start gap-2.5">
                     <div className="w-7 h-7 rounded-full bg-cyan-50 text-cyan-600 flex items-center justify-center flex-shrink-0 text-[10px] font-bold">
                       {a.usuario.split(' ').map(n => n[0]).join('')}
@@ -275,6 +291,7 @@ export function ResumenEjecutivo({ sedeSeleccionada }: { sedeSeleccionada: SedeI
           )}
         </CardBody>
       </Card>
+      <CallToOpportunityDrawer open={llamadaOpen} onClose={() => setLlamadaOpen(false)} />
     </div>
   );
 }

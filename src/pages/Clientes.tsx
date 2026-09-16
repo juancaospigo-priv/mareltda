@@ -10,8 +10,9 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { useToast } from '@/components/ui/Toast';
+import { useSessionData } from '@/context/SessionData';
 import {
-  clientes as clientesInit, vendedores, formatCOP, diasDesde,
+  vendedores, formatCOP, diasDesde,
   type Cliente, type EstadoComercial, type NivelRiesgo, type EspeciePrincipal,
 } from '@/data/simData';
 
@@ -32,7 +33,7 @@ const riesgoTone: Record<NivelRiesgo, 'error' | 'warning' | 'success'> = {
 export function Clientes() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { showToast } = useToast();
-  const [clientes, setClientes] = useState<Cliente[]>(clientesInit);
+  const { clientes, setClientes } = useSessionData();
   const [busqueda, setBusqueda] = useState('');
   const [filtroEstado, setFiltroEstado] = useState<EstadoComercial | 'todos'>('todos');
   const [filtroEspecie, setFiltroEspecie] = useState<EspeciePrincipal | 'todos'>('todos');

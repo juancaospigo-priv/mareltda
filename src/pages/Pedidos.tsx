@@ -8,8 +8,9 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { useToast } from '@/components/ui/Toast';
+import { useSessionData } from '@/context/SessionData';
 import {
-  pedidos as pedidosInit, sedes, formatCOP,
+  sedes, formatCOP,
   type Pedido, type EstadoPedido, type SedeId,
 } from '@/data/simData';
 
@@ -33,7 +34,7 @@ const estados: EstadoPedido[] = ['Por estructurar', 'Pendiente de confirmar', 'E
 
 export function Pedidos() {
   const { showToast } = useToast();
-  const [pedidos, setPedidos] = useState<Pedido[]>(pedidosInit);
+  const { pedidos, setPedidos } = useSessionData();
   const [filtroEstado, setFiltroEstado] = useState<EstadoPedido | 'todos'>('todos');
   const [pedidoSel, setPedidoSel] = useState<Pedido | null>(null);
   const [editando, setEditando] = useState(false);

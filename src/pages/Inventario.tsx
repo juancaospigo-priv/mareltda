@@ -9,8 +9,9 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { useToast } from '@/components/ui/Toast';
+import { useSessionData } from '@/context/SessionData';
 import {
-  productos, sedes, trasladosSugeridos as trasladosInit, stockTotal,
+  productos, sedes, stockTotal,
   type EstadoInventario, type SedeId, type TrasladoSugerido,
 } from '@/data/simData';
 
@@ -30,10 +31,10 @@ const estadoIcons: Record<EstadoInventario, typeof Package> = {
 
 export function Inventario({ sedeSeleccionada }: { sedeSeleccionada: SedeId | 'todas' }) {
   const { showToast } = useToast();
+  const { traslados, setTraslados } = useSessionData();
   const [busqueda, setBusqueda] = useState('');
   const [filtroEstado, setFiltroEstado] = useState<EstadoInventario | 'todos'>('todos');
   const [filtroCategoria, setFiltroCategoria] = useState<string | 'todas'>('todas');
-  const [traslados, setTraslados] = useState<TrasladoSugerido[]>(trasladosInit);
   const [trasladoAprobar, setTrasladoAprobar] = useState<TrasladoSugerido | null>(null);
   const [vista, setVista] = useState<'inventario' | 'traslados'>('inventario');
 

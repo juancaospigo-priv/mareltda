@@ -8,8 +8,9 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { useToast } from '@/components/ui/Toast';
+import { useSessionData } from '@/context/SessionData';
 import {
-  visitas as visitasInit, clientes, productos,
+  productos,
   type Visita,
 } from '@/data/simData';
 
@@ -27,7 +28,7 @@ function getSemanaFechas(): string[] {
 
 export function Visitas() {
   const { showToast } = useToast();
-  const [visitas, setVisitas] = useState<Visita[]>(visitasInit);
+  const { visitas, setVisitas, clientes } = useSessionData();
   const [modalNueva, setModalNueva] = useState(false);
   const [modalDetalle, setModalDetalle] = useState<Visita | null>(null);
   const [nuevaVisita, setNuevaVisita] = useState({
