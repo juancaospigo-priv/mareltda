@@ -1,18 +1,16 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
-  BookOpen, Search, Filter, Package, MapPin, CheckCircle2,
-  AlertTriangle, PackageX, TrendingDown, ChevronRight, X,
-  Layers, Info,
+  BookOpen, Search, Filter, Package, MapPin, ChevronRight, Layers, Info,
 } from 'lucide-react';
-import { Card, CardHeader, CardBody } from '@/components/ui/Card';
+import { Card, CardBody } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { useToast } from '@/components/ui/Toast';
 import {
   productos, sedes, stockTotal,
-  type EstadoInventario, type SedeId, type Producto,
+  type EstadoInventario, type Producto,
 } from '@/data/simData';
 
 const estadoTone: Record<EstadoInventario, 'success' | 'warning' | 'error' | 'purple'> = {
@@ -27,6 +25,16 @@ const ejemplosBusqueda = [
   'suplementos para equinos',
   'referencias agotadas en Simijaca',
 ];
+
+const normalizar = (texto: string) => texto
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .toLowerCase();
+
+const palabrasVacias = new Set([
+  'producto', 'productos', 'referencia', 'referencias', 'para', 'de', 'del',
+  'en', 'la', 'el', 'los', 'las', 'disponible', 'disponibles', 'ganado',
+]);
 
 export function Catalogo() {
   const [searchParams] = useSearchParams();
@@ -43,15 +51,23 @@ export function Catalogo() {
   const laboratorios = Array.from(new Set(productos.map((p) => p.laboratorio)));
 
   const filtrados = useMemo(() => {
-    const q = busqueda.toLowerCase().trim();
+    const q = normalizar(busqueda).trim();
     return productos
       .filter((p) => {
         if (!q) return true;
-        // Tolerant search: match name, code, category, species, lab
-        const haystack = `${p.nombre} ${p.codigo} ${p.categoria} ${p.especie} ${p.laboratorio} ${p.presentacion}`.toLowerCase();
-        // Also match partial words
-        const terms = q.split(/\s+/);
-        return terms.every((t) => haystack.includes(t));
+        const haystack = normalizar(`${p.nombre} ${p.codigo} ${p.categoria} ${p.especie} ${p.laboratorio} ${p.presentacion}`);
+        const sedeMencionada = sedes.find((s) => q.includes(normalizar(s.nombre)));
+        if (sedeMencionada) {
+          const pideAgotado = q.includes('agotad');
+          if (pideAgotado ? p.stock[sedeMencionada.id] !== 0 : p.stock[sedeMencionada.id] === 0) return false;
+        }
+        if ((q.includes('equino') || q.includes('caballo')) && p.especie !== 'Equinos' && p.especie !== 'Ambos') return false;
+        if ((q.includes('bovino') || q.includes('ganado') || q.includes('leche')) && p.especie !== 'Bovinos' && p.especie !== 'Ambos') return false;
+        if (q.includes('suplement') && !normalizar(p.categoria).includes('suplement')) return false;
+
+        const terms = q.split(/\s+/).filter((t) => t.length > 2 && !palabrasVacias.has(t));
+        const intentTerms = terms.filter((t) => !['ubate', 'simijaca', 'siberia', 'caro', 'agotadas', 'agotados', 'equinos', 'equino', 'bovinos', 'bovino', 'leche', 'suplementos'].includes(t));
+        return intentTerms.every((t) => haystack.includes(t));
       })
       .filter((p) => filtroEspecie === 'todas' || p.especie === filtroEspecie || p.especie === 'Ambos')
       .filter((p) => filtroCategoria === 'todas' || p.categoria === filtroCategoria)

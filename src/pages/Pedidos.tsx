@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
 import {
-  ShoppingCart, Filter, ChevronRight, X, Package, MapPin,
+  ShoppingCart, ChevronRight, Package, MapPin,
   Minus, Plus, CheckCircle2, Clock, AlertTriangle, FileEdit,
 } from 'lucide-react';
-import { Card, CardBody } from '@/components/ui/Card';
+import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';

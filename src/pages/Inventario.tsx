@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import {
-  Package, Search, Filter, ArrowRightLeft, CheckCircle2,
-  AlertTriangle, TrendingDown, PackageX, ChevronRight, MapPin,
+  Package, Search, ArrowRightLeft, CheckCircle2,
+  AlertTriangle, TrendingDown, PackageX, MapPin,
   ArrowRight,
 } from 'lucide-react';
 import { Card, CardHeader, CardBody } from '@/components/ui/Card';

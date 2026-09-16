@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Users, UserMinus, Sparkles, ShoppingCart, PackageX, TrendingDown,
-  ArrowRightLeft, DollarSign, AlertTriangle, ArrowRight, Clock,
-  CalendarDays, Activity, CheckCircle2, ChevronRight,
+  ArrowRightLeft, DollarSign, AlertTriangle, ArrowRight,
+  CalendarDays, Activity, ChevronRight,
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -126,7 +126,7 @@ export function ResumenEjecutivo({ sedeSeleccionada }: { sedeSeleccionada: SedeI
                   <XAxis dataKey="sede" tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${(v / 1000000).toFixed(0)}M`} />
                   <Tooltip
-                    formatter={(v: number) => [formatCOP(v), 'Valor potencial']}
+                    formatter={(value) => [formatCOP(Number(value ?? 0)), 'Valor potencial']}
                     contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '12px' }}
                   />
                   <Bar dataKey="valor" fill="#06b6d4" radius={[6, 6, 0, 0]} barSize={40} />

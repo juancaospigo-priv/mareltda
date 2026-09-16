@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import {
   CalendarDays, Plus, MapPin, Clock, CheckCircle2, Circle,
-  X, Package, Sparkles, ChevronRight, User,
+  Package, Sparkles, ChevronRight, User, Save,
 } from 'lucide-react';
 import { Card, CardHeader, CardBody } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -9,15 +9,15 @@ import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { useToast } from '@/components/ui/Toast';
 import {
-  visitas as visitasInit, clientes, vendedores, productos,
+  visitas as visitasInit, clientes, productos,
   type Visita,
 } from '@/data/simData';
 
 const diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
 function getSemanaFechas(): string[] {
-  // Week of Sept 15-21, 2026 (the demo week)
-  const base = new Date('2026-09-15');
+  // Week containing the demo date: Sept 14-20, 2026.
+  const base = new Date('2026-09-14T12:00:00');
   return Array.from({ length: 7 }, (_, i) => {
     const d = new Date(base);
     d.setDate(d.getDate() + i);
@@ -71,6 +71,13 @@ export function Visitas() {
     setNuevaTarea('');
   };
 
+  const guardarNotas = () => {
+    if (!modalDetalle) return;
+    setVisitas((prev) => prev.map((v) => (v.id === modalDetalle.id ? { ...v, notas: notaEdit } : v)));
+    setModalDetalle((prev) => (prev ? { ...prev, notas: notaEdit } : null));
+    showToast('Notas de la visita actualizadas', 'success');
+  };
+
   const registrarNuevaVisita = () => {
     if (!nuevaVisita.clienteId || !nuevaVisita.fecha) return;
     const cliente = clientes.find((c) => c.id === nuevaVisita.clienteId);
@@ -111,7 +118,7 @@ export function Visitas() {
             <CalendarDays className="w-6 h-6 text-cyan-500" />
             Visitas
           </h1>
-          <p className="text-sm text-gray-500 mt-1">Agenda semanal · Semana del 15 al 21 de septiembre</p>
+          <p className="text-sm text-gray-500 mt-1">Agenda semanal · Semana del 14 al 20 de septiembre</p>
         </div>
         <Button variant="primary" icon={<Plus className="w-4 h-4" />} onClick={() => setModalNueva(true)}>
           Registrar visita
@@ -235,7 +242,12 @@ export function Visitas() {
 
             {/* Notas */}
             <div>
-              <label className="text-sm font-medium text-navy-700 block mb-1">Notas de la visita</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-sm font-medium text-navy-700">Notas de la visita</label>
+                <Button size="sm" variant="ghost" icon={<Save className="w-3.5 h-3.5" />} onClick={guardarNotas} disabled={notaEdit === modalDetalle.notas}>
+                  Guardar notas
+                </Button>
+              </div>
               <textarea
                 value={notaEdit}
                 onChange={(e) => setNotaEdit(e.target.value)}
@@ -322,7 +334,7 @@ export function Visitas() {
           <div>
             <label className="text-sm font-medium text-navy-700 block mb-2">Productos de interés</label>
             <div className="max-h-40 overflow-y-auto space-y-1 border border-gray-200 rounded-lg p-2">
-              {productos.slice(0, 12).map((p) => (
+              {productos.map((p) => (
                 <label key={p.codigo} className="flex items-center gap-2 p-1.5 hover:bg-gray-50 rounded cursor-pointer">
                   <input
                     type="checkbox"

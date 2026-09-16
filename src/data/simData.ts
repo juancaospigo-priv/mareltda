@@ -288,7 +288,7 @@ export const clientes: Cliente[] = [
   {
     id: 'C-008', nombre: 'Hacienda La Trinidad', tipoExplotacion: 'Doble propósito', municipio: 'Ubaté',
     especiePrincipal: 'Bovinos', vendedor: 'Ana Ríos', ultimaVisita: '2026-08-01', ultimaCompra: '2026-08-10',
-    estadoComportunidad: 'En seguimiento' as any, proximaAccion: 'Confirmar interés en vacunas', nivelRiesgo: 'Medio',
+    estadoComercial: 'En seguimiento', proximaAccion: 'Confirmar interés en vacunas', nivelRiesgo: 'Medio',
     telefono: '310 555 0108', hectareas: 180, numAnimales: 130,
     historialVisitas: [
       { fecha: '2026-08-01', vendedor: 'Ana Ríos', notas: 'Cliente evalúa cambiar de proveedor de sal mineralizada. Oportunidad de retención.', productosInteres: ['SM-6001'], realizada: true },
@@ -435,9 +435,6 @@ export const clientes: Cliente[] = [
     ],
   },
 ];
-
-// Fix typo in C-008
-(clientes[7] as any).estadoComercial = 'En seguimiento';
 
 export type EstadoPedido = 'Por estructurar' | 'Pendiente de confirmar' | 'En preparación' | 'Requiere traslado' | 'Despachado';
 
@@ -667,7 +664,7 @@ export function getOportunidadesPorSede() {
   const sedeMap: Record<string, number> = {};
   oportunidades.forEach((o) => {
     if (o.valorPotencial > 0) {
-      const sede = o.sedeInvolucrada || o.clienteId ? clienteSede(o.clienteId!) : 'siberia';
+      const sede = o.sedeInvolucrada ?? (o.clienteId ? clienteSede(o.clienteId) : 'siberia');
       const nombre = sedes.find((s) => s.id === sede)?.nombre || 'Siberia';
       sedeMap[nombre] = (sedeMap[nombre] || 0) + o.valorPotencial;
     }

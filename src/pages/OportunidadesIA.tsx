@@ -5,7 +5,7 @@ import {
   Package, TrendingDown, RefreshCw, ChevronRight, Filter,
   CheckCircle2, Clock, User,
 } from 'lucide-react';
-import { Card, CardHeader, CardBody } from '@/components/ui/Card';
+import { Card, CardBody } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';

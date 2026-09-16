@@ -1,11 +1,11 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
-  Users, Search, Filter, ChevronRight, Phone, MapPin, Calendar,
+  Users, Search, ChevronRight, Phone, MapPin, Calendar,
   ShoppingCart, Sparkles, ClipboardList, StickyNote, Plus,
   CheckCircle2, Circle, X, User, Building2,
 } from 'lucide-react';
-import { Card, CardHeader, CardBody } from '@/components/ui/Card';
+import { Card, CardBody } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
