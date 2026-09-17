@@ -69,7 +69,7 @@ export function OportunidadesIA() {
   const cerradas = oportunidades.filter((o) => o.estado === 'Cerrada').length;
 
   return (
-    <div className="space-y-6 max-w-[1600px] mx-auto">
+    <div id="demo-oportunidades" className="space-y-6 max-w-[1600px] mx-auto">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

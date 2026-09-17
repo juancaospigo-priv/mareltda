@@ -8,6 +8,7 @@ import {
   BookOpen,
   CalendarDays,
   Settings,
+  Truck,
   X,
 } from 'lucide-react';
 
@@ -19,6 +20,7 @@ const navItems = [
   { to: '/inventario', label: 'Inventario', icon: Package },
   { to: '/catalogo', label: 'Catálogo', icon: BookOpen },
   { to: '/visitas', label: 'Visitas', icon: CalendarDays },
+  { to: '/despachos', label: 'Despachos y rutas', icon: Truck },
   { to: '/configuracion', label: 'Configuración', icon: Settings },
 ];
 
@@ -31,15 +33,20 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
           open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
-        {/* Wordmark */}
-        <div className="flex items-center justify-between px-5 py-5 border-b border-navy-700/50">
-          <div>
-            <p className="text-lg font-bold tracking-tight">
-              MARE <span className="text-cyan-400">|</span> Salud Animal
-            </p>
-            <p className="text-[10px] text-navy-300 mt-0.5">Control IA</p>
+        {/* Identidad corporativa */}
+        <div className="flex items-start justify-between gap-3 px-4 py-4 border-b border-navy-700/50">
+          <div className="min-w-0 flex-1">
+            <div className="relative h-12 overflow-hidden rounded-lg bg-white shadow-sm">
+              <img
+                src="/mare-logo.png"
+                alt="Logo de MARE"
+                className="absolute inset-x-0 top-1/2 w-full -translate-y-1/2"
+              />
+            </div>
+            <p className="mt-2 text-sm font-semibold tracking-tight text-white">MARE <span className="text-cyan-400">|</span> Salud Animal</p>
+            <p className="text-[10px] text-navy-300">Control IA · Inteligencia para la gestión</p>
           </div>
-          <button onClick={onClose} className="lg:hidden text-navy-300 hover:text-white">
+          <button aria-label="Cerrar navegación" onClick={onClose} className="lg:hidden mt-1 text-navy-300 hover:text-white">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -72,7 +79,7 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
         {/* Demo disclaimer */}
         <div className="px-4 py-3 border-t border-navy-700/50">
           <p className="text-[10px] text-navy-300 text-center leading-relaxed">
-            Prototipo demostrativo<br />Datos simulados
+            Prototipo demostrativo<br />Todos los datos son simulados
           </p>
         </div>
       </aside>

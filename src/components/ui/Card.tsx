@@ -1,8 +1,13 @@
-import type { ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 
-export function Card({ children, className = '', hover = false }: { children: ReactNode; className?: string; hover?: boolean }) {
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+  hover?: boolean;
+}
+
+export function Card({ children, className = '', hover = false, ...props }: CardProps) {
   return (
-    <div className={`bg-white rounded-xl border border-gray-200 shadow-card ${hover ? 'transition-shadow hover:shadow-card-hover' : ''} ${className}`}>
+    <div {...props} className={`bg-white rounded-xl border border-gray-200 shadow-card ${hover ? 'transition-shadow hover:shadow-card-hover' : ''} ${className}`}>
       {children}
     </div>
   );

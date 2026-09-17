@@ -42,9 +42,9 @@ const pedidoLlamada: Pedido = {
   fecha: '2026-09-16',
   estado: 'Pendiente de confirmar',
   lineas: [
-    { codigo: 'AP-2001', nombre: 'Ivermectivet 1% Inyectable', cantidad: 4, precioUnitario: 30000, sedeDespacho: 'ubate' },
-    { codigo: 'AC-7001', nombre: 'Concentrado Lechero Premium 18%', cantidad: 10, precioUnitario: 90000, sedeDespacho: 'ubate' },
-    { codigo: 'SM-6001', nombre: 'Sal Mineralizada Bovina 12%', cantidad: 6, precioUnitario: 45000, sedeDespacho: 'ubate' },
+    { codigo: 'AP-2001', nombre: 'Antiparasitario Bovino Campo', cantidad: 4, precioUnitario: 30000, sedeDespacho: 'ubate' },
+    { codigo: 'AC-7001', nombre: 'Concentrado Lechero Premium', cantidad: 10, precioUnitario: 90000, sedeDespacho: 'ubate' },
+    { codigo: 'SM-6001', nombre: 'Sal Mineralizada Bovina', cantidad: 6, precioUnitario: 45000, sedeDespacho: 'ubate' },
   ],
   vendedor: 'Carlos Mendoza',
   notas: 'Pedido estructurado desde llamada con IA. Confirmar sal mineralizada y traslado del concentrado.',
@@ -53,7 +53,7 @@ const pedidoLlamada: Pedido = {
 const trasladoLlamada: TrasladoSugerido = {
   id: 'TR-IA-001',
   productoCodigo: 'AC-7001',
-  productoNombre: 'Concentrado Lechero Premium 18%',
+  productoNombre: 'Concentrado Lechero Premium',
   sedeOrigen: 'siberia',
   sedeDestino: 'ubate',
   cantidad: 10,

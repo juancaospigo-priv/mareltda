@@ -65,7 +65,7 @@ export function Inventario({ sedeSeleccionada }: { sedeSeleccionada: SedeId | 't
   };
 
   return (
-    <div className="space-y-6 max-w-[1600px] mx-auto">
+    <div id="demo-inventario-modulo" className="space-y-6 max-w-[1600px] mx-auto">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -247,7 +247,7 @@ export function Inventario({ sedeSeleccionada }: { sedeSeleccionada: SedeId | 't
         footer={
           <>
             <Button variant="secondary" onClick={() => setTrasladoAprobar(null)}>Cancelar</Button>
-            <Button variant="accent" onClick={aprobarTraslado}>Aprobar y ejecutar</Button>
+            <Button variant="accent" onClick={aprobarTraslado}>Aprobar traslado</Button>
           </>
         }
       >

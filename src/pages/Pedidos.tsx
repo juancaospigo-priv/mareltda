@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import {
   ShoppingCart, ChevronRight, Package, MapPin,
-  Minus, Plus, CheckCircle2, Clock, AlertTriangle, FileEdit,
+  Minus, Plus, CheckCircle2, Clock, AlertTriangle, FileEdit, Search,
 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -36,14 +36,21 @@ export function Pedidos() {
   const { showToast } = useToast();
   const { pedidos, setPedidos } = useSessionData();
   const [filtroEstado, setFiltroEstado] = useState<EstadoPedido | 'todos'>('todos');
+  const [busqueda, setBusqueda] = useState('');
   const [pedidoSel, setPedidoSel] = useState<Pedido | null>(null);
   const [editando, setEditando] = useState(false);
 
   const filtrados = useMemo(() => {
     return pedidos
       .filter((p) => filtroEstado === 'todos' || p.estado === filtroEstado)
+      .filter((p) => {
+        const q = busqueda.trim().toLocaleLowerCase('es-CO');
+        if (!q) return true;
+        return [p.id, p.clienteNombre, p.vendedor, ...p.lineas.map((linea) => linea.nombre)]
+          .some((valor) => valor.toLocaleLowerCase('es-CO').includes(q));
+      })
       .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
-  }, [pedidos, filtroEstado]);
+  }, [pedidos, filtroEstado, busqueda]);
 
   const totalPedido = (p: Pedido) => p.lineas.reduce((sum, l) => sum + l.cantidad * l.precioUnitario, 0);
 
@@ -79,7 +86,7 @@ export function Pedidos() {
   };
 
   return (
-    <div className="space-y-6 max-w-[1600px] mx-auto">
+    <div id="demo-pedidos" className="space-y-6 max-w-[1600px] mx-auto">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-navy-800 flex items-center gap-2">
@@ -89,8 +96,19 @@ export function Pedidos() {
         <p className="text-sm text-gray-500 mt-1">Bandeja de pedidos y solicitudes · {pedidos.length} pedidos</p>
       </div>
 
-      {/* Status filter tabs */}
-      <div className="flex flex-wrap gap-2">
+      {/* Búsqueda y filtros */}
+      <div className="flex flex-col xl:flex-row xl:items-center gap-3">
+        <div className="relative w-full xl:w-72 flex-shrink-0">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <input
+            value={busqueda}
+            onChange={(event) => setBusqueda(event.target.value)}
+            placeholder="Buscar pedido, cliente o producto..."
+            aria-label="Buscar pedidos"
+            className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-3 text-sm text-navy-700 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+          />
+        </div>
+        <div className="flex flex-wrap gap-2">
         <button
           onClick={() => setFiltroEstado('todos')}
           className={`px-3 py-1.5 text-sm rounded-lg font-medium transition-colors ${filtroEstado === 'todos' ? 'bg-navy-700 text-white' : 'bg-white text-navy-600 border border-gray-200 hover:bg-gray-50'}`}
@@ -111,6 +129,7 @@ export function Pedidos() {
             </button>
           );
         })}
+        </div>
       </div>
 
       {/* Pedidos table/cards */}
@@ -147,7 +166,7 @@ export function Pedidos() {
       {filtrados.length === 0 && (
         <div className="text-center py-12">
           <ShoppingCart className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500">No hay pedidos con el estado seleccionado</p>
+          <p className="text-gray-500">No hay pedidos que coincidan con la búsqueda y el estado seleccionado.</p>
         </div>
       )}
 

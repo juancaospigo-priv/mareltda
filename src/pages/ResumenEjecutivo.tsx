@@ -4,6 +4,7 @@ import {
   Users, UserMinus, Sparkles, ShoppingCart, PackageX, TrendingDown,
   ArrowRightLeft, DollarSign, AlertTriangle, ArrowRight,
   CalendarDays, Activity, ChevronRight, PhoneCall, CheckCircle2,
+  PlayCircle,
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -17,6 +18,7 @@ import { Skeleton, SkeletonCard } from '@/components/ui/Skeleton';
 import { useToast } from '@/components/ui/Toast';
 import { CallToOpportunityDrawer } from '@/components/calls/CallToOpportunityDrawer';
 import { useSessionData } from '@/context/SessionData';
+import { useDemoTour } from '@/context/DemoTour';
 import {
   getKPIs, getPrioridadesIA, getOportunidadesPorSede, getInventarioStatusData,
   formatCOP, diasDesde, type SedeId,
@@ -25,6 +27,7 @@ import {
 export function ResumenEjecutivo({ sedeSeleccionada }: { sedeSeleccionada: SedeId | 'todas' }) {
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { startDemo } = useDemoTour();
   const [loading, setLoading] = useState(true);
   const [llamadaOpen, setLlamadaOpen] = useState(false);
   const { clientes, pedidos, traslados, visitas, actividades, llamadaConvertida } = useSessionData();
@@ -73,20 +76,27 @@ export function ResumenEjecutivo({ sedeSeleccionada }: { sedeSeleccionada: SedeI
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-navy-800">
-            {getGreeting()}. Esto es lo que requiere atención hoy en Mare.
+            {getGreeting()}. Esto es lo que requiere atención hoy en MARE.
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Resumen consolidado {sedeSeleccionada === 'todas' ? 'de todas las sedes' : `de sede ${sedeSeleccionada}`}
+            Decisiones comerciales, inventario y seguimiento en una sola vista · Datos simulados · {sedeSeleccionada === 'todas' ? 'Todas las sedes' : `Sede ${sedeSeleccionada}`}
           </p>
         </div>
-        <Button variant="accent" size="lg" icon={llamadaConvertida ? <CheckCircle2 className="w-4 h-4" /> : <PhoneCall className="w-4 h-4" />} onClick={() => setLlamadaOpen(true)} className="flex-shrink-0">
-          Registrar llamada con IA
-        </Button>
+        <div className="flex flex-wrap items-center gap-2 flex-shrink-0">
+          <Button variant="secondary" icon={<PlayCircle className="w-4 h-4" />} onClick={startDemo}>
+            Iniciar demostración
+          </Button>
+          <div id="demo-llamada">
+            <Button variant="accent" size="lg" icon={llamadaConvertida ? <CheckCircle2 className="w-4 h-4" /> : <PhoneCall className="w-4 h-4" />} onClick={() => setLlamadaOpen(true)}>
+              Registrar llamada con IA
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* KPIs */}
       {loading ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div id="demo-kpis" className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)}
         </div>
       ) : (
@@ -103,7 +113,7 @@ export function ResumenEjecutivo({ sedeSeleccionada }: { sedeSeleccionada: SedeI
       )}
 
       {/* AI Priorities */}
-      <Card className="border-l-4 border-l-cyan-500">
+      <Card id="demo-prioridades" className="border-l-4 border-l-cyan-500">
         <CardHeader
           title="Prioridades detectadas por IA"
           subtitle="Análisis automático de datos comerciales e inventario"
@@ -112,17 +122,17 @@ export function ResumenEjecutivo({ sedeSeleccionada }: { sedeSeleccionada: SedeI
         />
         <CardBody className="space-y-3">
           {prioridades.map((p) => (
-            <div key={p.id} className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
-              <div className="w-8 h-8 rounded-lg bg-accent-50 text-accent-600 flex items-center justify-center flex-shrink-0">
-                <AlertTriangle className="w-4 h-4" />
+            <div key={p.id} className="flex items-start gap-4 p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+              <div className="w-9 h-9 rounded-lg bg-accent-50 text-accent-600 flex items-center justify-center flex-shrink-0">
+                <AlertTriangle className="w-[18px] h-[18px]" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-navy-800">{p.titulo}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{p.explicacion}</p>
+                <p className="text-base font-semibold leading-snug text-navy-800">{p.titulo}</p>
+                <p className="text-sm leading-relaxed text-gray-600 mt-1">{p.explicacion}</p>
               </div>
-              <Button size="sm" variant="secondary" onClick={() => handlePrioridad(p.tipo)} className="flex-shrink-0">
+              <Button variant="secondary" onClick={() => handlePrioridad(p.tipo)} className="flex-shrink-0 mt-0.5">
                 {p.accion}
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4" />
               </Button>
             </div>
           ))}
@@ -235,9 +245,9 @@ export function ResumenEjecutivo({ sedeSeleccionada }: { sedeSeleccionada: SedeI
       </div>
 
       {/* Clientes que requieren atención */}
-      <Card>
+      <Card id="demo-clientes">
         <CardHeader
-          title="Clientes que requieren atención"
+          title="Clientes que requieren seguimiento"
           subtitle="Sin contacto prolongado o en riesgo comercial"
           icon={<AlertTriangle className="w-5 h-5" />}
           action={<Button size="sm" variant="ghost" onClick={() => navigate('/clientes')}>Ver todos <ChevronRight className="w-4 h-4" /></Button>}

@@ -31,7 +31,7 @@ export function Configuracion() {
   };
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div id="demo-configuracion" className="space-y-6 max-w-4xl mx-auto">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-navy-800 flex items-center gap-2">

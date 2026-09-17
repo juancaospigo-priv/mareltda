@@ -29,6 +29,15 @@
     background-size: 1000px 100%;
     animation: shimmer 1.5s infinite linear;
   }
+  .demo-tour-target-active {
+    position: relative;
+    z-index: 60;
+    border-radius: 0.75rem;
+    outline: 4px solid #67e8f9;
+    outline-offset: 4px;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.28);
+    transition: outline-color 200ms ease, box-shadow 200ms ease;
+  }
 }
 
 /* Custom scrollbar */

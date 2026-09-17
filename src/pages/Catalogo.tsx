@@ -95,7 +95,7 @@ export function Catalogo() {
   };
 
   return (
-    <div className="space-y-6 max-w-[1600px] mx-auto">
+    <div id="demo-catalogo" className="space-y-6 max-w-[1600px] mx-auto">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-navy-800 flex items-center gap-2">

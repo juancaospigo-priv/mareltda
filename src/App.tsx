@@ -10,6 +10,7 @@ import { Inventario } from '@/pages/Inventario';
 import { Catalogo } from '@/pages/Catalogo';
 import { Visitas } from '@/pages/Visitas';
 import { Configuracion } from '@/pages/Configuracion';
+import { DespachosRutas } from '@/pages/DespachosRutas';
 import type { SedeId } from '@/data/simData';
 
 function useSede() {
@@ -40,6 +41,7 @@ export default function App() {
               <Route path="inventario" element={<InventarioWrapper />} />
               <Route path="catalogo" element={<Catalogo />} />
               <Route path="visitas" element={<Visitas />} />
+              <Route path="despachos" element={<DespachosRutas />} />
               <Route path="configuracion" element={<Configuracion />} />
             </Route>
           </Routes>

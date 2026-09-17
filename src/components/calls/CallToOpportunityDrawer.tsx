@@ -28,9 +28,9 @@ interface ProductoSolicitud {
 }
 
 const productosIniciales: ProductoSolicitud[] = [
-  { codigo: 'AP-2001', nombre: 'Ivermectivet 1% Inyectable', cantidad: 4, unidad: 'unidades' },
-  { codigo: 'AC-7001', nombre: 'Concentrado Lechero Premium 18%', cantidad: 10, unidad: 'bultos' },
-  { codigo: 'SM-6001', nombre: 'Sal Mineralizada Bovina 12%', cantidad: 6, unidad: 'bolsas' },
+  { codigo: 'AP-2001', nombre: 'Antiparasitario Bovino Campo', cantidad: 4, unidad: 'unidades' },
+  { codigo: 'AC-7001', nombre: 'Concentrado Lechero Premium', cantidad: 10, unidad: 'bultos' },
+  { codigo: 'SM-6001', nombre: 'Sal Mineralizada Bovina', cantidad: 6, unidad: 'bolsas' },
 ];
 
 const sugerenciasIniciales = [

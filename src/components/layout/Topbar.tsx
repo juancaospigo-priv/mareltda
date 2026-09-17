@@ -115,6 +115,10 @@ export function Topbar({ sedeSeleccionada, onSedeChange, onMenuClick }: TopbarPr
         )}
       </div>
 
+      <span className="hidden xl:inline-flex items-center rounded-full border border-cyan-200 bg-cyan-50 px-2.5 py-1 text-[10px] font-semibold text-cyan-700 whitespace-nowrap">
+        Prototipo · Datos simulados
+      </span>
+
       {/* Sede selector */}
       <div ref={sedeRef} className="relative">
         <button
